@@ -16,7 +16,7 @@
 #   uptime - coreutils
 #   free - procps
 #   df - coreutils
-#   ip - iproute2
+#   ip - iproute
 #   tput - ncurses
 # Make sure the above commands are available when matrix-status is executed.
 # 

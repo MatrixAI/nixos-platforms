@@ -45,13 +45,14 @@ in
         boot.loader.efi.efiSysMountPoint = esp.mountPath;
 
         # Kernel command line parameters on boot
-        boot.kernelParams = [ ];
+        # Make ZFS ignore the hostId and force import
+        boot.kernelParams = [ "zfs_force=1" ];
 
         # Autoload kernel modules by scanning hardware
         boot.hardwareScan = true;
 
         # Sets the linux kernel version
-        boot.kernelPackages = pkgs.linuxPackages_4_10;
+        boot.kernelPackages = pkgs.linuxPackages_4_9;
 
         # Kernel modules for stage 1 boot
         # Loop is needed in order to decrypt a raw file /luks-key.img as a block device
@@ -62,7 +63,7 @@ in
 
         # Encrypted LUKS key will be stored as a gzipped cpio archive image
         # This allows us to use single password unlock
-        boot.initrd.prepend = [ "${./luks-key.img.cpio.gz}" ];
+        boot.initrd.prepend = [ "${./secrets/luks-key.img.cpio.gz}" ];
 
         # make sure to decrypt our luks-key.img virtual block device first
         boot.initrd.luks.devices = 
@@ -92,7 +93,8 @@ in
             enable = true;
             ssh = {
                 enable = true;
-                authorisedKeys = [ ./identity.pub ];
+                hostRSAKey = ./secrets/host.key;
+                authorizedKeys = [ (builtins.readFile ./identity.pub) ];
                 port = 22;
                 shell = "/bin/ash";
             };
@@ -136,7 +138,7 @@ in
 
         networking = {
             hostName = "matrix-central";
-            hostId = "2a40c197"; # randomly generated from `head -c4 /dev/urandom | od -A none -t x4 | xargs`
+            hostId = (builtins.readFile ./secrets/hostId);
             enableIPv6 = true;
             firewall = {
                 enable = true;
@@ -186,7 +188,7 @@ in
             gnugrep       # grep
             gawk          # awk
             ncurses       # tput (terminal control)
-            iproute2      # ip, tc
+            iproute       # ip, tc
             nettools      # hostname, ifconfig
             pciutils      # lspci, setpci
             utillinux     # linux system utilities
@@ -196,11 +198,14 @@ in
             procps        # ps, top, pidof, vmstat, slabtop, skill, w
             psmisc        # fuser, killall, pstree, peekfd
             shadow        # passwd, su
+            mkpasswd      # mkpasswd
             efibootmgr    # efi management
             openssh       # ssh
             hdparm        # disk info
             git           # needed for content addressed nixpkgs
         ];
+
+        nixpkgs.config.allowUnfree = true;
 
         # Enable ZSH as a shell
         programs.zsh.enable = true;
@@ -296,7 +301,7 @@ in
                     home = "/home/cmcdragonkai";
                     createHome = true;
                     useDefaultShell = true;
-                    hashedPassword = "$6$Zae7fWpI.wf8Vl$Fu7wjtmpsCfCiK/fzfN1/8iPaHHYIcgb.T7XXtZ0S3y68WpB4R4qTN0Aq0kmJvfJOgXw9VrRCmiCZDBxNtEzA/";
+                    hashedPassword = builtins.readFile ./secrets/operator-password-hash;
                     openssh.authorizedKeys.keyFiles = [ ./identity.pub ];
                 };
             };
