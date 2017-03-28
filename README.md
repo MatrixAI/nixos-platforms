@@ -28,7 +28,7 @@ popd
 
 rm --recursive --force /etc/nixos
 git clone https://github.com/MatrixAI/nixos-platforms.git /etc/nixos
-nixos-rebuild -I nixpkgs=/nix/nixpkgs nixos-config=/etc/nixos/<PLATFORM>/configuration.nix boot --install-bootloader
+nixos-rebuild -I nixpkgs=/nix/nixpkgs -I nixos-config=/etc/nixos/<PLATFORM>/configuration.nix boot --install-bootloader
 ```
 
 Make sure to enter the correct `<PLATFORM>`.
