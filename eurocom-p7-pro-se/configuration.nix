@@ -14,11 +14,29 @@ let
     };
 in 
     {
-        
-        imports = [
-            ./hardware-configuration.nix
-        ];
-        
+
+        fileSystems = {
+            "/" = {
+                device = "rpool";
+                fsType = "zfs";
+            };
+            "/tmp" = {
+                device = "rpool/tmp";
+                fsType = "zfs";
+            };
+            "/boot" = {
+                device = "/dev/disk/by-id/ata-PLEXTOR_PX-G128M6e_P02445180196-part1";
+                fsType = "vfat";
+                options = [ "umask=0022" ];
+            };
+        };
+
+        swapDevices = [];
+
+        # Enable all firmware
+        # Max compatibility! 
+        hardware.enableAllFirmware = true;
+
 	# CPU microcode
         hardware.cpu.intel.updateMicrocode = true;
 
@@ -54,7 +72,10 @@ in
         # Sets the linux kernel version
         boot.kernelPackages = pkgs.linuxPackages_4_9;
 
-        # Kernel modules for stage 1 boot
+        # Kernel modules available for loading for stage 1 boot
+        boot.initrd.availableKernelModules = [ "xhci_pci" "ehci_pci" "ahci" "usb_storage" ];
+
+        # Kernel modules that must be loaded for stage 1 boot
         # Loop is needed in order to decrypt a raw file /luks-key.img as a block device
         boot.initrd.kernelModules = [ "loop" ];
 
@@ -121,6 +142,8 @@ in
         # at no point is the ESP ever available to the kernel, unless it mounts it directly
         # the ESP is only accessed by the UEFI firmware to load the gummiboot bootloader, which sets it up as /
 
+        boot.kernelModules = [ "kvm-intel" ];
+
         boot.supportedFilesystems = [ "zfs" ];
 
         boot.kernel.sysctl = {
@@ -172,7 +195,8 @@ in
             "nixpkgs=/nix/nixpkgs" 
             "nixos-config=/etc/nixos/eurocom-p7-pro-se/configuration.nix"
         ];
-        nix.buildCores = 0; # use all available cores any single build of parallel buildable packages
+        nix.maxJobs = 8; # maximum of 8 build jobs for 8 cores
+        nix.buildCores = 0; # use all available cores for parallel buildable packages
         nix.useSandbox =  true;
         nix.readOnlyStore = true; 
         nix.extraOptions = ''
