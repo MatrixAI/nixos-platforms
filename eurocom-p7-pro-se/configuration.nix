@@ -238,7 +238,7 @@ in
         # Only execute matrix-motd when its both an interactive and login shell
         programs.zsh.interactiveShellInit = ''
             if [ -n "$PS1" ]; then
-                . /etc/nixos/motd.sh
+                . /etc/nixos/eurocom-p7-pro-se/motd.sh
                 [[ -o login ]] && matrix-motd
             fi
         '';
@@ -262,9 +262,6 @@ in
                 exportConfiguration = true;
                 videoDrivers = [ "nvidia" ]; # a priority list of video drivers to drive X, it is possible to specify legacy driverslike: "nvidiaLegacy340"
 		xrandrHeads = [ "DP-0" ];
-                screenSection = ''
-                    Option "DPI" "128 x 128"
-                '';
                 synaptics = {
                     enable = true;
                     minSpeed = "0.5";
