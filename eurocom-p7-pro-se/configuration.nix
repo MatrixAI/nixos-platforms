@@ -282,10 +282,10 @@ in
                     hiddenUsers = [ "root" "nobody" ]; # cannot login to root
                 };
                 desktopManager = {
-                    plasma5.enable = true;
                     xterm.enable = false;
                 };
                 windowManager = {
+                    default = "xmonad";
                     xmonad.enable = true;
                     xmonad.enableContribAndExtras = true; # automatically brings in xmonad-contrib and xmonad-extras
                     xmonad.extraPackages = haskellPackages: [ # more packages available from haskellPackages, made available to when compiling ~/.xmonad/xmonad.hs
