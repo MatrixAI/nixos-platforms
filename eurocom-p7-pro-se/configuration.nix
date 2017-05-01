@@ -76,7 +76,7 @@ in
         boot.initrd.availableKernelModules = [ "xhci_pci" "ehci_pci" "ahci" "usb_storage" ];
 
         # Kernel modules that must be loaded for stage 1 boot
-        # Loop is needed in order to decrypt a raw file /luks-key.img as a block device
+        # Loop is needed in order to decrypt a raw file /luks_key.img as a block device
         boot.initrd.kernelModules = [ "loop" ];
 
 	# ZFS for stage 1 boot
@@ -84,7 +84,7 @@ in
 
         # Encrypted LUKS key will be stored as a gzipped cpio archive image
         # This allows us to use single password unlock
-        boot.initrd.prepend = [ "${./secrets/luks-key.img.cpio.gz}" ];
+        boot.initrd.prepend = [ "${./secrets/luks_key.img.cpio.gz}" ];
 
         # make sure to decrypt our luks-key.img virtual block device first
         boot.initrd.luks.devices = 
@@ -142,7 +142,7 @@ in
         # at no point is the ESP ever available to the kernel, unless it mounts it directly
         # the ESP is only accessed by the UEFI firmware to load the gummiboot bootloader, which sets it up as /
 
-        boot.kernelModules = [ "kvm-intel" ];
+        boot.kernelModules = [ "kvm-intel" "coretemp" ];
 
         boot.supportedFilesystems = [ "zfs" ];
 
@@ -161,8 +161,9 @@ in
 
         networking = {
             hostName = "matrix-central";
-            hostId = (builtins.readFile ./secrets/hostId);
+            hostId = (builtins.readFile ./secrets/hostid);
             enableIPv6 = true;
+            useNetworkd = true;
             firewall = {
                 enable = true;
                 allowPing = true;
@@ -173,7 +174,20 @@ in
                 logRefusedPackets = true;
                 logRefusedUnicastsOnly = true;
             };
-            networkmanager.enable = true;
+            interfaces = {
+                wlp6s0 = {
+                    ipAddress = "10.0.0.1";
+                    prefixLength = 24;
+                    ipv6Address = "fd99:cbc4:692::1";
+                    ipv6PrefixLength = 64;
+                };
+            };
+            nat = {
+                enable = true;
+                externalInterface = "enp7s0";
+                internalInterfaces = [ "wlp6s0" ];
+                forwardPorts = [];
+            };
         };
 
         i18n = {
@@ -212,6 +226,7 @@ in
             gnugrep       # grep
             gawk          # awk
             ncurses       # tput (terminal control)
+            iw            # wireless configuration
             iproute       # ip, tc
             nettools      # hostname, ifconfig
             pciutils      # lspci, setpci
@@ -219,6 +234,7 @@ in
             cryptsetup    # luks
             mtools        # disk labelling
             smartmontools # disk monitoring
+            lm_sensors    # fan monitoring
             procps        # ps, top, pidof, vmstat, slabtop, skill, w
             psmisc        # fuser, killall, pstree, peekfd
             shadow        # passwd, su
@@ -246,6 +262,48 @@ in
         services = {
             mingetty.greetingLine = ''[[[ \l @ \n (\s \r \m) ]]]''; # getty message
             gpm.enable = true;
+            hostapd = {
+                enable = true;
+                interface = "wlp6s0";
+                hwMode = "g";
+                channel = 1;
+                wpa = false;
+                ssid = (builtins.readFile ./secrets/ap_ssid);
+                extraConfig = ''
+                    auth_algs=1
+                    wpa=2
+                    wpa_key_mgmt=WPA-PSK
+                    wpa_passphrase=${builtins.readFile ./secrets/ap_pass}
+                    wpa_pairwise=CCMP TKIP
+                    rsn_pairwise=CCMP
+                    ieee80211n=1
+                    wmm_enabled=1
+                    country_code=AU
+                    ieee80211d=1
+                    ht_capab=[HT40+][SHORT-GI-20][SHORT-GI-40][DSSS_CCK-40]
+                '';
+            };
+            dnsmasq = {
+                enable = true;
+                extraConfig = ''
+                    interface=wlp6s0
+                    bind-interfaces
+                    dhcp-range=10.0.0.2,10.0.0.254
+                '';
+                resolveLocalQueries = true;
+                servers = [ 
+                    "192.231.203.132" 
+                    "192.231.203.3" 
+                    "8.8.8.8" 
+                    "8.8.4.4"
+                    "209.244.0.3" 
+                    "209.244.0.4" 
+                    "2001:44b8:1::1" 
+                    "2001:44b8:2::2"
+                    "2001:4860:4860::8888"
+                    "2001:1608:10:25::1c04:b12f"
+                ];
+            };
             openssh = {
                 enable = true;
                 startWhenNeeded = true;
@@ -322,7 +380,7 @@ in
                     home = "/home/cmcdragonkai";
                     createHome = true;
                     useDefaultShell = true;
-                    hashedPassword = builtins.readFile ./secrets/operator-password-hash;
+                    hashedPassword = builtins.readFile ./secrets/operator_password_hash;
                     openssh.authorizedKeys.keyFiles = [ ./identity.pub ];
                 };
             };
