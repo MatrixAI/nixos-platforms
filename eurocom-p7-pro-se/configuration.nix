@@ -167,12 +167,21 @@ in
             firewall = {
                 enable = true;
                 allowPing = true;
-                allowedTCPPorts = [ 22 55555 ]; # allow five 5s for custom TCP 
-                allowedUDPPorts = [ 22 55555 ]; # allow five 5s for custom UDP
+                pingLimit = "--limit 3/second --limit-burst 5";
+                allowedTCPPorts = [
+                    22    # ssh
+                    55555 # five 5s for custom TCP
+                ];
+                allowedUDPPorts = [
+                    53 # dnsmasq dns
+                    67 # dnsmasq dhcp
+                    22 # ssh
+                    55555 # five 5s for custom UDP
+                ];
                 rejectPackets = false;
                 logRefusedConnections = true;
-                logRefusedPackets = true;
-                logRefusedUnicastsOnly = true;
+                logRefusedPackets = false;
+                logRefusedUnicastsOnly = false;
             };
             interfaces = {
                 wlp6s0 = {
