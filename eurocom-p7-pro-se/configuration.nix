@@ -295,9 +295,11 @@ in
             dnsmasq = {
                 enable = true;
                 extraConfig = ''
+                    dhcp-authoritative
                     interface=wlp6s0
                     bind-interfaces
                     dhcp-range=10.0.0.2,10.0.0.254
+                    dhcp-range=fd99:cbc4:692::,ra-stateless
                 '';
                 resolveLocalQueries = true;
                 servers = [ 
