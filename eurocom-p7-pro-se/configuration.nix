@@ -357,8 +357,9 @@ in
                     default = "xmonad";
                     xmonad.enable = true;
                     xmonad.enableContribAndExtras = true; # automatically brings in xmonad-contrib and xmonad-extras
-                    xmonad.extraPackages = haskellPackages: [ # more packages available from haskellPackages, made available to when compiling ~/.xmonad/xmonad.hs
-                        haskellPackages.xmobar
+                    xmonad.extraPackages = haskellPackages: [ 
+                        # haskell packages made available to ghc when compiling ~/.xmonad/xmonad.hs
+                        # this is not where you put executables expected to be spawned by xmonad
                     ];
                 };
             };
