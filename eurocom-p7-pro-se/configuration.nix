@@ -230,28 +230,29 @@ in
         # packages required for system functionality, including everything used by xmonad
         # all other packages should be part of the user profile
         environment.systemPackages = with pkgs; [
-            coreutils     # basic shell utilities
-            gnused        # sed
-            gnugrep       # grep
-            gawk          # awk
-            ncurses       # tput (terminal control)
-            iw            # wireless configuration
-            iproute       # ip, tc
-            nettools      # hostname, ifconfig
-            pciutils      # lspci, setpci
-            utillinux     # linux system utilities
-            cryptsetup    # luks
-            mtools        # disk labelling
-            smartmontools # disk monitoring
-            lm_sensors    # fan monitoring
-            procps        # ps, top, pidof, vmstat, slabtop, skill, w
-            psmisc        # fuser, killall, pstree, peekfd
-            shadow        # passwd, su
-            mkpasswd      # mkpasswd
-            efibootmgr    # efi management
-            openssh       # ssh
-            hdparm        # disk info
-            git           # needed for content addressed nixpkgs
+            coreutils       # basic shell utilities
+            gnused          # sed
+            gnugrep         # grep
+            gawk            # awk
+            ncurses         # tput (terminal control)
+            iw              # wireless configuration
+            iproute         # ip, tc
+            nettools        # hostname, ifconfig
+            pciutils        # lspci, setpci
+            utillinux       # linux system utilities
+            cryptsetup      # luks
+            mtools          # disk labelling
+            smartmontools   # disk monitoring
+            lm_sensors      # fan monitoring
+            xorg.xbacklight # monitor brightness
+            procps          # ps, top, pidof, vmstat, slabtop, skill, w
+            psmisc          # fuser, killall, pstree, peekfd
+            shadow          # passwd, su
+            mkpasswd        # mkpasswd
+            efibootmgr      # efi management
+            openssh         # ssh
+            hdparm          # disk info
+            git             # needed for content addressed nixpkgs
         ];
 
         nixpkgs.config.allowUnfree = true;
@@ -370,6 +371,7 @@ in
             dbus.enable = true;
             haveged.enable = true;
             locate.enable = true;
+            upower.enable = true;
             cron.enable = false;
         };
 
