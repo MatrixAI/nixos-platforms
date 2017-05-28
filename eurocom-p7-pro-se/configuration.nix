@@ -239,6 +239,7 @@ in
             iproute         # ip, tc
             nettools        # hostname, ifconfig
             pciutils        # lspci, setpci
+            bluez-tools     # bluetooth tools
             utillinux       # linux system utilities
             cryptsetup      # luks
             mtools          # disk labelling
@@ -251,6 +252,7 @@ in
             mkpasswd        # mkpasswd
             efibootmgr      # efi management
             openssh         # ssh
+            gnupg           # encryption/decryption/signing
             hdparm          # disk info
             git             # needed for content addressed nixpkgs
         ];
@@ -401,6 +403,7 @@ in
         };
 
         security.sudo.wheelNeedsPassword = true;
+        security.polkit.enable = true;
 
         # activationScripts and postBootCommands run just before 
         # systemd is started, but after stage 1 has mounted the root filesystem
@@ -585,5 +588,10 @@ in
             ID="matrix-central"
             HOME_URL="https://matrix.ai/"
         '';
+
+        environment.variables = {
+            # disable gnome accessibility warnings
+            NO_AT_BRIDGE = "1";
+        };
 
     }
