@@ -303,6 +303,8 @@ in
                     bind-interfaces
                     dhcp-range=10.0.0.2,10.0.0.254
                     dhcp-range=fd99:cbc4:692::,ra-stateless
+                    address=/localhost/127.0.0.1
+                    address=/localhost/::1
                 '';
                 resolveLocalQueries = true;
                 servers = [ 
