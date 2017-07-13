@@ -170,6 +170,7 @@ in
                 pingLimit = "--limit 3/second --limit-burst 5";
                 allowedTCPPorts = [
                     22    # ssh
+                    24800 # synergy
                     55555 # five 5s for custom TCP
                 ];
                 allowedUDPPorts = [
