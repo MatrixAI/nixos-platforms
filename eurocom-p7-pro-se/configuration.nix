@@ -258,6 +258,104 @@ in
             git             # needed for content addressed nixpkgs
         ];
 
+        systemd.user.sockets.gpg-agent = {
+          enable = true;
+          description = "GnuPG cryptographic agent and passphrase cache";
+          documentation = [ "man:gpg-agent(1)" ];
+          listenStreams = [ "%t/gnupg/S.gpg-agent" ];
+          wantedBy = [ "sockets.target" ];
+          socketConfig = {
+            FileDescriptorName = "std";
+            SocketMode = "0600";
+            DirectoryMode = "0700";
+          };
+        };
+
+        systemd.user.sockets.gpg-agent-ssh = {
+          enable = true;
+          description = "GnuPG cryptographic agent (ssh-agent emulation)";
+          documentation = [ "man:gpg-agent(1)" "man:ssh-add(1)" "man:ssh-agent(1)" "man:ssh(1)" ];
+          listenStreams = [ "%t/gnupg/S.gpg-agent.ssh" ];
+          wantedBy = [ "sockets.target" ];
+          socketConfig = {
+            FileDescriptorName = "ssh";
+            Service = "gpg-agent.service";
+            SocketMode = "0600";
+            DirectoryMode = "0700";
+          };
+        };
+
+        systemd.user.sockets.gpg-agent-extra = {
+          enable = true;
+          description = "GnuPG cryptographic agent and passphrase cache (restricted)";
+          documentation = [ "man:gpg-agent(1)" ];
+          listenStreams = [ "%t/gnupg/S.gpg-agent.extra" ];
+          wantedBy = [ "sockets.target" ];
+          socketConfig = {
+            FileDescriptorName = "extra";
+            Service = "gpg-agent.service";
+            SocketMode = "0600";
+            DirectoryMode = "0700";
+          };
+        };
+
+        systemd.user.sockets.gpg-agent-browser = {
+          enable = true;
+          description = "GnuPG cryptographic agent and passphrase cache (access for web browsers)";
+          documentation = [ "man:gpg-agent(1)" ];
+          listenStreams = [ "%t/gnupg/S.gpg-agent.browser" ];
+          wantedBy = [ "sockets.target" ];
+          socketConfig = {
+            FileDescriptorName = "browser";
+            Service = "gpg-agent.service";
+            SocketMode = "0600";
+            DirectoryMode = "0700";
+          };
+        };
+
+        systemd.user.services.gpg-agent = {
+          enable = true;
+          description = "GnuPG cryptographic agent and passphrase cache";
+          documentation = [ "man:gpg-agent(1)" ];
+          requires = [ "gpg-agent.socket" ];
+          after = [ "gpg-agent.socket" ];
+          wantedBy = [ "default.target" ];
+          unitConfig = {
+            RefuseManualStart = "true";
+          };
+          serviceConfig = {
+            ExecStart = "${pkgs.gnupg}/bin/gpg-agent --supervised";
+            ExecReload = "${pkgs.gnupg}/bin/gpgconf --reload gpg-agent";
+          };
+        };
+
+        systemd.user.sockets.dirmngr = {
+          enable = true;
+          description = "GnuPG network certificate management daemon";
+          documentation = [ "man:dirmngr(1)" ];
+          listenStreams = [ "%t/gnupg/S.dirmngr" ];
+          wantedBy = [ "sockets.target" ];
+          socketConfig = {
+            SocketMode = "0600";
+            DirectoryMode = "0700";
+          };
+        };
+
+        systemd.user.services.dirmngr = {
+          enable = true;
+          description = "GnuPG network certificatge management daemon";
+          documentation = [ "man:dirmngr(1)" ];
+          requires = [ "dirmngr.socket" ];
+          after = [ "dirmngr.socket" ];
+          unitConfig = {
+            RefuseManualStart = "true";
+          };
+          serviceConfig = {
+            ExecStart = "${pkgs.gnupg}/bin/dirmngr --supervised";
+            ExecReload = "${pkgs.gnupg}/bin/gpgconf --reload dirmngr";
+          };
+        };
+
         nixpkgs.config.allowUnfree = true;
 
         # replaced by gpg agent
