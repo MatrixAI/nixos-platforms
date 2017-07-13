@@ -260,6 +260,9 @@ in
 
         nixpkgs.config.allowUnfree = true;
 
+        # replaced by gpg agent
+        programs.ssh.startAgent = false;
+
         # Enable ZSH as a shell
         programs.zsh.enable = true;
 
