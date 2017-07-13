@@ -228,7 +228,7 @@ in
             fsync-metadata = true
         '';
 
-        # packages required for system functionality, including everything used by xmonad
+        # packages required for system functionality
         # all other packages should be part of the user profile
         environment.systemPackages = with pkgs; [
             coreutils       # basic shell utilities
