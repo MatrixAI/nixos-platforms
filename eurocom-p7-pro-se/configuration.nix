@@ -372,6 +372,9 @@ in
                 [[ -o login ]] && matrix-motd
             fi
         '';
+	
+	# Android development
+	programs.adb.enable = true;
 
         services = {
             mingetty.greetingLine = ''[[[ \l @ \n (\s \r \m) ]]]''; # getty message
@@ -496,7 +499,7 @@ in
                     uid = 1000;
                     description = "CMCDragonkai";
                     group = "operators";
-                    extraGroups = [ "wheel" "users" "networkmanager" ];
+                    extraGroups = [ "wheel" "users" "networkmanager" "adbusers" ];
                     home = "/home/cmcdragonkai";
                     createHome = true;
                     useDefaultShell = true;
