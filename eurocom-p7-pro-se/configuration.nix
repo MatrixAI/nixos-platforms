@@ -304,7 +304,8 @@ in
                 '';
             };
             printing.enable = true;
-            printing.drivers = [ pkgs.cups-bjnp ];
+            printing.drivers = [ pkgs.gutenprint ];
+            avahi.enable = true;
             dnsmasq = {
                 enable = true;
                 extraConfig = ''
