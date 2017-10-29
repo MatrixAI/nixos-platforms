@@ -240,6 +240,7 @@ in
             iproute         # ip, tc
             nettools        # hostname, ifconfig
             pciutils        # lspci, setpci
+            usbutils        # lsusb
             bluez-tools     # bluetooth tools
             utillinux       # linux system utilities
             cryptsetup      # luks
