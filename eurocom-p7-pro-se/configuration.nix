@@ -15,7 +15,8 @@ in
     {
 
         imports = [
-          ./wireless-mode.nix
+          ./wireless-client.nix
+          ./wireless-host.nix
         ];
 
         fileSystems = {
@@ -187,7 +188,7 @@ in
                 logRefusedPackets = false;
                 logRefusedUnicastsOnly = false;
             };
-            wirelessMode = "client";
+            wirelessModeClient.enable = true;
         };
 
         i18n = {

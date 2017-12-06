@@ -1,15 +1,6 @@
 { config, lib, ... }:
   let
-    cfg = config.networking.wirelessMode;
-    wirelessClient = {
-      networking = {
-        networkmanager = {
-          enable = true;
-          useDnsmasq = true;
-          insertNameservers = import ./nameservers.nix;
-        };
-      };
-    };
+    cfg = config.networking.wirelessModeHost;
     wirelessHost = {
       networking = {
         interfaces = {
@@ -72,17 +63,11 @@
   in
     with lib; {
       options = {
-        networking.wirelessMode = mkOption {
-          type = types.enum [ "client" "host" ];
-          default = "client";
+        networking.wirelessModeHost.enable = mkOption {
+          type = types.bool;
+          default = false;
         };
       };
-      config =
-        if (cfg.networking.wirelessMode == "client") then
-          wirelessClient
-        else if (cfg.networking.wirelessMode == "host") 
-          wirelessHost
-        else then 
-          wirelessClient;
+      config = mkIf cfg.enable wirelessHost;
     }
 
