@@ -7,6 +7,7 @@
 let 
     # need to convert all the other configuration to deal with storageGeometry layout
     storageGeometry = import ./storageGeometry.nix;
+    nameservers = import ./nameservers.nix;
     esp = {
         mountPath = "/boot";
         checksumPath = "/var/tmp/espsum";
@@ -45,13 +46,13 @@ in
 
         # Video codec acceleration
         # https://wiki.archlinux.org/index.php/Hardware_video_acceleration
- 	hardware.opengl.driSupport = true;
+        hardware.opengl.driSupport = true;
         hardware.opengl.driSupport32Bit = true;
-	hardware.opengl.extraPackages = [ pkgs.vaapiVdpau ];
+        hardware.opengl.extraPackages = [ pkgs.vaapiVdpau ];
 
         # Audio
         sound.enable = true;
-  	sound.mediaKeys.enable = true;
+        sound.mediaKeys.enable = true;
         hardware.pulseaudio.enable = true;
         hardware.pulseaudio.support32Bit = true;
         hardware.pulseaudio.package = pkgs.pulseaudioFull;
@@ -79,7 +80,7 @@ in
         # Loop is needed in order to decrypt a raw file /luks_key.img as a block device
         boot.initrd.kernelModules = [ "loop" ];
 
-	# ZFS for stage 1 boot
+        # ZFS for stage 1 boot
         boot.initrd.supportedFilesystems = [ "zfs" ];
 
         # Encrypted LUKS key will be stored as a gzipped cpio archive image
@@ -107,10 +108,10 @@ in
                     storageGeometry.disks
             );
 
-	# Network for stage 1 boot
-	# Only supports ethernet, not WiFi
-	# Allows SSH in stage 1
-	boot.initrd.network = {
+        # Network for stage 1 boot
+        # Only supports ethernet, not WiFi
+        # Allows SSH in stage 1
+        boot.initrd.network = {
             enable = true;
             ssh = {
                 enable = true;
@@ -119,7 +120,7 @@ in
                 port = 22;
                 shell = "/bin/ash";
             };
-	};
+        };
 
         boot.initrd.preDeviceCommands = ''
            echo "Running Pre-Device Commands"
@@ -163,7 +164,7 @@ in
             hostName = "matrix-central";
             hostId = (builtins.readFile ./secrets/hostid);
             enableIPv6 = true;
-            useNetworkd = true;
+            useNetworkd = false;
             firewall = {
                 enable = true;
                 allowPing = true;
@@ -198,6 +199,12 @@ in
                 internalInterfaces = [ "wlp6s0" ];
                 forwardPorts = [];
             };
+            networkmanager = {
+                enable = true;
+                useDnsmasq = true;
+                unmanaged = [ "wlp6s0" ];
+                insertNameservers = nameservers;
+            };
         };
 
         i18n = {
@@ -215,7 +222,7 @@ in
             ];
         };
 
-	nix.nixPath = [ 
+        nix.nixPath = [ 
             "nixpkgs=/nix/nixpkgs" 
             "nixos-config=/etc/nixos/eurocom-p7-pro-se/configuration.nix"
         ];
@@ -283,8 +290,18 @@ in
         services = {
             mingetty.greetingLine = ''[[[ \l @ \n (\s \r \m) ]]]''; # getty message
             gpm.enable = true;
+            printing.enable = true;
+            printing.drivers = [ pkgs.gutenprint ];
+            avahi.enable = true;
+            kmscon.enable = true;
+            kmscon.hwRender = true;
+            dbus.enable = true;
+            haveged.enable = true;
+            locate.enable = true;
+            upower.enable = true;
+            cron.enable = false;
             hostapd = {
-                enable = true;
+                enable = false;
                 interface = "wlp6s0";
                 hwMode = "g";
                 channel = 1;
@@ -304,11 +321,8 @@ in
                     ht_capab=[HT40+][SHORT-GI-20][SHORT-GI-40][DSSS_CCK-40]
                 '';
             };
-            printing.enable = true;
-            printing.drivers = [ pkgs.gutenprint ];
-            avahi.enable = true;
             dnsmasq = {
-                enable = true;
+                enable = false;
                 extraConfig = ''
                     dhcp-authoritative
                     interface=wlp6s0
@@ -319,18 +333,7 @@ in
                     address=/localhost/::1
                 '';
                 resolveLocalQueries = true;
-                servers = [ 
-                    "192.231.203.132" 
-                    "192.231.203.3" 
-                    "8.8.8.8" 
-                    "8.8.4.4"
-                    "209.244.0.3" 
-                    "209.244.0.4" 
-                    "2001:44b8:1::1" 
-                    "2001:44b8:2::2"
-                    "2001:4860:4860::8888"
-                    "2001:1608:10:25::1c04:b12f"
-                ];
+                servers = nameservers;
             };
             openssh = {
                 enable = true;
@@ -380,15 +383,6 @@ in
                     ];
                 };
             };
-            # this may not work, but if it does, it replaces getty to produce a high resolution terminal
-            # not sure how this affects the mingetty line
-            kmscon.enable = true;
-            kmscon.hwRender = true;
-            dbus.enable = true;
-            haveged.enable = true;
-            locate.enable = true;
-            upower.enable = true;
-            cron.enable = false;
         };
 
         users = {
