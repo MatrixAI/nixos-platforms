@@ -52,8 +52,7 @@ in
         hardware.pulseaudio.package = pkgs.pulseaudioFull;
 
         # Bootloader
-        boot.loader.grub.enable = true;
-        boot.loader.grub.device = "/dev/disk/by-id/ata-Samsung_SSD_850_EVO_250GB_S3NYNF0J887432R-part1";
+        boot.loader.systemd-boot.enable = true;
         boot.loader.efi.efiSysMountPoint = esp.mountPath;
 
         # Kernel command line parameters on boot
