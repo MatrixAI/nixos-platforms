@@ -52,7 +52,7 @@ in
         hardware.pulseaudio.package = pkgs.pulseaudioFull;
 
         # Bootloader
-        boot.loader.timeout = null; # menu can be shown if space key is pressed at boot
+        boot.loader.grub.enable = true;
         boot.loader.efi.efiSysMountPoint = esp.mountPath;
 
         # Kernel command line parameters on boot
