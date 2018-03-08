@@ -66,7 +66,7 @@ in
         boot.kernelPackages = pkgs.linuxPackages_4_15;
 
         # Kernel modules available for loading for stage 1 boot
-        boot.initrd.availableKernelModules = [ "xhci_pci" "ehci_pci" "ahci" "usb_storage" ];
+        boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "usbhid" "usb_storage" "sd_mod" ];
 
         # Kernel modules that must be loaded for stage 1 boot
         boot.initrd.kernelModules = [];
