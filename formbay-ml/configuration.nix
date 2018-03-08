@@ -94,7 +94,7 @@ in
 
         networking = {
             hostName = "formbay-ml";
-            hostId = (builtins.readFile ./secrets/hostid);
+            hostId = builtins.readFile ./secrets/hostid;
             enableIPv6 = true;
             useNetworkd = false;
             firewall = {

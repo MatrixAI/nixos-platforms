@@ -32,3 +32,13 @@ nixos-rebuild -I nixpkgs=/nix/nixpkgs -I nixos-config=/etc/nixos/<PLATFORM>/conf
 ```
 
 Make sure to enter the correct `<PLATFORM>`.
+
+---
+
+To generate the hostid for a file. You actually need:
+
+```
+head -c4 /dev/urandom | od -A none -t x4 | tr -d ' \n'
+```
+
+The `hostid` file must not have any spaces nor newlines.
