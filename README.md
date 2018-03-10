@@ -32,3 +32,23 @@ nixos-rebuild -I nixpkgs=/nix/nixpkgs -I nixos-config=/etc/nixos/<PLATFORM>/conf
 ```
 
 Make sure to enter the correct `<PLATFORM>`.
+
+---
+
+To setup ZFS at USB boot. you will need to set `boot.supportedFilesystems = [ "zfs" ];` to your `/etc/nixos/configuration.nix` and then run `nixos-rebuild switch`.
+
+Generating `secrets/hostid`:
+
+```sh
+head -c4 /dev/urandom | od -A none -t x4 | tr -d ' \n' > secrets/hostid
+```
+
+Generating `secrets/operator_password_hash`:
+
+```sh
+mkpasswd -m sha-512 | tr -d ' \n' > secrets/operator_password_hash
+```
+
+When running nixos-install. Use `NIXOS_CONFIG="etc/nixos/<PLATFORM>/configuration.nix" nixos-install`.
+
+Running `nixos-install` multiple times is not truly idempotent. I recommend you to delete the `/boot`, and `/etc` except for `/etc/nixos` and `/etc/zfs/zpool.cache`. Otherwise certain files will be left there and unchanged.
