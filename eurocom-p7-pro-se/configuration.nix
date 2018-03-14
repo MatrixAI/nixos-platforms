@@ -74,7 +74,7 @@ in
         boot.hardwareScan = true;
 
         # Sets the linux kernel version
-        boot.kernelPackages = pkgs.linuxPackages_4_9;
+        boot.kernelPackages = pkgs.linuxPackages_4_15;
 
         # Kernel modules available for loading for stage 1 boot
         boot.initrd.availableKernelModules = [ "xhci_pci" "ehci_pci" "ahci" "usb_storage" ];
@@ -284,6 +284,9 @@ in
             locate.enable = true;
             upower.enable = true;
             cron.enable = false;
+            udev.extraRules = ''
+              SUBSYSTEMS=="usb", ATTRS{idVendor}=="2c97", ATTRS{idProduct}=="0001", MODE="0660", OWNER="cmcdragonkai"
+            '';
             openssh = {
                 enable = true;
                 startWhenNeeded = true;
@@ -338,18 +341,23 @@ in
             defaultUserShell = "/run/current-system/sw/bin/zsh"; # set the default shell to ZSH instead of bash
             enforceIdUniqueness = true;
             mutableUsers = false;
-            groups = [
-                {
-                    name = "operators";
+            groups = {
+                operators = {
                     gid = 1000;
-                }
-            ];
+                };
+            };
             users = {
                 "cmcdragonkai" = {
                     uid = 1000;
                     description = "CMCDragonkai";
                     group = "operators";
-                    extraGroups = [ "wheel" "users" "networkmanager" "adbusers" ];
+                    extraGroups = [ 
+                      "wheel" 
+                      "users"
+                      "networkmanager"
+                      "docker"
+                      "adbusers"
+                    ];
                     home = "/home/cmcdragonkai";
                     createHome = true;
                     useDefaultShell = true;
@@ -361,6 +369,8 @@ in
 
         security.sudo.wheelNeedsPassword = true;
         security.polkit.enable = true;
+
+        virtualisation.docker.enable = true;
 
         # activationScripts and postBootCommands run just before 
         # systemd is started, but after stage 1 has mounted the root filesystem
