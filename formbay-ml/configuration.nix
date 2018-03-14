@@ -203,7 +203,7 @@ in
             mingetty.greetingLine = ''[[[ \l @ \n (\s \r \m) ]]]''; # getty message
             gpm.enable = true;
             printing.enable = true;
-            printing.drivers = [ pkgs.gutenprint pkgs.hplip ];
+            printing.drivers = [ pkgs.gutenprint pkgs.hplipWithPlugin ];
             avahi.enable = true;
             kmscon.enable = true;
             kmscon.hwRender = true;
