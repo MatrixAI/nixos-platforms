@@ -203,7 +203,10 @@ in
             mingetty.greetingLine = ''[[[ \l @ \n (\s \r \m) ]]]''; # getty message
             gpm.enable = true;
             printing.enable = true;
-            printing.drivers = [ pkgs.gutenprint pkgs.hplipWithPlugin ];
+            printing.drivers = [
+              pkgs.gutenprint
+              pkgs.hplipWithPlugin
+            ];
             avahi.enable = true;
             kmscon.enable = true;
             kmscon.hwRender = true;
@@ -261,7 +264,13 @@ in
                     uid = 1000;
                     description = "CMCDragonkai";
                     group = "operators";
-                    extraGroups = [ "wheel" "users" "networkmanager" "adbusers" ];
+                    extraGroups = [
+                      "wheel"
+                      "users"
+                      "networkmanager"
+                      "docker"
+                      "adbusers"
+                    ];
                     home = "/home/cmcdragonkai";
                     createHome = true;
                     useDefaultShell = true;
@@ -273,6 +282,8 @@ in
 
         security.sudo.wheelNeedsPassword = true;
         security.polkit.enable = true;
+
+        virtualisation.docker.enable = true;
 
         # activationScripts and postBootCommands run just before 
         # systemd is started, but after stage 1 has mounted the root filesystem
