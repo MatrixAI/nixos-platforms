@@ -322,9 +322,4 @@ in
     HOME_URL="https://matrix.ai/"
   '';
 
-  environment.variables = {
-    # disable gnome accessibility warnings
-    NO_AT_BRIDGE = "1";
-  };
-
 }
