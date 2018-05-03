@@ -191,14 +191,14 @@ in
   # Android development
   programs.adb.enable = true;
 
-  # Printing
-  services.printing.enable = true;
-  services.printing.drivers = [ pkgs.gutenprint ];
-
   # Scanning
   hardware.sane.enable = true;
 
   services = {
+    printing = {
+      enable = true;
+      drivers = [ pkgs.gutenprint ];
+    };
     mingetty.greetingLine = ''[[[ \l @ \n (\s \r \m) ]]]''; # getty message
     gpm.enable = true;
     avahi.enable = true;
