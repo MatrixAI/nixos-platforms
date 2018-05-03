@@ -275,7 +275,6 @@ in
         description = "Oliver";
         group = "operators";
         extraGroups = [
-          "wheel"
           "users"
           "networkmanager"
           "scanner"
@@ -293,7 +292,6 @@ in
         description = "Vivian";
         group = "operators";
         extraGroups = [
-          "wheel"
           "users"
           "networkmanager"
           "scanner"
