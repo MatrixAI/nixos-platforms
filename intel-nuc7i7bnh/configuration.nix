@@ -29,10 +29,6 @@ in
 
   swapDevices = [];
 
-  # Enable all firmware
-  # Max compatibility!
-  hardware.enableAllFirmware = true;
-
   # CPU microcode
   hardware.cpu.intel.updateMicrocode = true;
 
@@ -195,11 +191,16 @@ in
   # Android development
   programs.adb.enable = true;
 
+  # Printing
+  services.printing.enable = true;
+  services.printing.drivers = [ pkgs.gutenprint ];
+
+  # Scanning
+  hardware.sane.enable = true;
+
   services = {
     mingetty.greetingLine = ''[[[ \l @ \n (\s \r \m) ]]]''; # getty message
     gpm.enable = true;
-    printing.enable = true;
-    printing.drivers = [ pkgs.gutenprint ];
     avahi.enable = true;
     kmscon.enable = true;
     kmscon.hwRender = true;
@@ -258,6 +259,8 @@ in
           "wheel"
           "users"
           "networkmanager"
+          "scanner"
+          "lp"
           "docker"
           "adbusers"
         ];
@@ -275,6 +278,8 @@ in
           "wheel"
           "users"
           "networkmanager"
+          "scanner"
+          "lp"
           "docker"
           "adbusers"
         ];
@@ -291,6 +296,8 @@ in
           "wheel"
           "users"
           "networkmanager"
+          "scanner"
+          "lp"
           "docker"
           "adbusers"
         ];
