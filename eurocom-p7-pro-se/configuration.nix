@@ -230,6 +230,8 @@ in
             iw              # wireless configuration
             iproute         # ip, tc
             nettools        # hostname, ifconfig
+            dmidecode       # dmidecode
+            lshw            # lshw
             pciutils        # lspci, setpci
             usbutils        # lsusb
             bluez-tools     # bluetooth tools

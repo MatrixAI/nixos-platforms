@@ -1,7 +1,6 @@
 # external nameservers to use
 # this is locale sensitive
 [
-  "172.30.0.2"                 # formbay vpn
   "192.231.203.132"            # internode 1
   "192.231.203.3"              # internode 2
   "8.8.8.8"                    # google 1
