@@ -285,7 +285,7 @@ in
             upower.enable = true;
             cron.enable = false;
             udev.extraRules = ''
-              SUBSYSTEMS=="usb", ATTRS{idVendor}=="2c97", ATTRS{idProduct}=="0001", MODE="0660", OWNER="cmcdragonkai"
+              SUBSYSTEMS=="usb", ATTRS{idVendor}=="2c97", ATTRS{idProduct}=="0001", MODE="0660", GROUP="plugdev"
             '';
             openssh = {
                 enable = true;
@@ -357,6 +357,7 @@ in
                       "networkmanager"
                       "docker"
                       "adbusers"
+                      "plugdev"
                     ];
                     home = "/home/cmcdragonkai";
                     createHome = true;
