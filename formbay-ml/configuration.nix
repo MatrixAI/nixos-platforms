@@ -35,6 +35,7 @@ in
         # Max compatibility! 
         hardware.enableAllFirmware = true;
         hardware.enableRedistributableFirmware = true;
+        hardware.u2f.enable = true;
 
         # CPU microcode
         hardware.cpu.intel.updateMicrocode = true;

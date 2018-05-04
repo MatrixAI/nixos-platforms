@@ -32,6 +32,7 @@ in
   # CPU microcode
   hardware.cpu.intel.updateMicrocode = true;
   hardware.enableRedistributableFirmware = true;
+  hardware.u2f.enable = true;
 
   # Video codec acceleration
   # https://wiki.archlinux.org/index.php/Hardware_video_acceleration
@@ -287,6 +288,7 @@ in
           "lp"
           "docker"
           "adbusers"
+          "plugdev"
         ];
         home = "/home/oliver";
         createHome = true;
@@ -304,6 +306,7 @@ in
           "lp"
           "docker"
           "adbusers"
+          "plugdev"
         ];
         home = "/home/vivian";
         createHome = true;
