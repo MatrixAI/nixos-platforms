@@ -273,6 +273,7 @@ in
                       "networkmanager"
                       "docker"
                       "adbusers"
+                      "plugdev"
                     ];
                     home = "/home/cmcdragonkai";
                     createHome = true;

@@ -266,6 +266,7 @@ in
           "lp"
           "docker"
           "adbusers"
+          "plugdev"
         ];
         home = "/home/cmcdragonkai";
         createHome = true;
