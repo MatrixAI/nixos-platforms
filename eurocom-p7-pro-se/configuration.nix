@@ -40,6 +40,7 @@ in
         # Enable all firmware
         # Max compatibility! 
         hardware.enableAllFirmware = true;
+        hardware.enableRedistributableFirmware = true;
 
         # CPU microcode
         hardware.cpu.intel.updateMicrocode = true;
