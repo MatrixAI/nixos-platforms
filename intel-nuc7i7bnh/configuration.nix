@@ -31,6 +31,7 @@ in
 
   # CPU microcode
   hardware.cpu.intel.updateMicrocode = true;
+  hardware.enableRedistributableFirmware = true;
 
   # Video codec acceleration
   # https://wiki.archlinux.org/index.php/Hardware_video_acceleration
