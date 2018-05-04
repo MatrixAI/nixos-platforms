@@ -348,6 +348,9 @@ in
                 operators = {
                     gid = 1000;
                 };
+                plugdev = {
+                    gid = 1001;
+                };
             };
             users = {
                 "cmcdragonkai" = {

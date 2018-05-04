@@ -247,12 +247,14 @@ in
     defaultUserShell = "/run/current-system/sw/bin/zsh";
     enforceIdUniqueness = true;
     mutableUsers = false;
-    groups = [
-      {
-        name = "operators";
+    groups = {
+      operators = {
         gid = 1000;
-      }
-    ];
+      };
+      plugdev = {
+        gid = 1001;
+      };
+    };
     users = {
       "cmcdragonkai" = {
         uid = 1000;

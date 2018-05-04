@@ -256,12 +256,14 @@ in
             defaultUserShell = "/run/current-system/sw/bin/zsh"; # set the default shell to ZSH instead of bash
             enforceIdUniqueness = true;
             mutableUsers = false;
-            groups = [
-                {
-                    name = "operators";
+            groups = {
+                operators = {
                     gid = 1000;
-                }
-            ];
+                };
+                plugdev = {
+                    gid = 1001;
+                };
+            };
             users = {
                 "cmcdragonkai" = {
                     uid = 1000;
