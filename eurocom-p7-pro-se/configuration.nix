@@ -85,7 +85,7 @@ in
     boot.initrd.prepend = [ "${./secrets/luks_key.img.cpio.gz}" ];
 
         # make sure to decrypt our luks-key.img virtual block device first
-    boot.initrd.luks.devices = 
+    boot.initrd.luks.devices =
       [
         {
           device = "/luks-key.img";
@@ -129,7 +129,7 @@ in
       ${pkgs.cryptsetup}/bin/cryptsetup luksClose luks-key-encrypted
     '';
 
-    boot.initrd.postMountCommands = '' 
+    boot.initrd.postMountCommands = ''
       echo "Running Post-Mount Commands"
     '';
 
@@ -538,13 +538,13 @@ in
           | md5sum
         )
 
-        if [ ! -f '${esp.checksumPath}' -o ! -s '${esp.checksumPath}' ]; then 
+        if [ ! -f '${esp.checksumPath}' -o ! -s '${esp.checksumPath}' ]; then
 
           echo "Proceeding to clone ESP because checksum doesn't exist."
           clone_esp
           echo "$espsum" >'${esp.checksumPath}'
 
-        elif ! grep --fixed-strings --line-regexp --quiet "$espsum" '${esp.checksumPath}'; then 
+        elif ! grep --fixed-strings --line-regexp --quiet "$espsum" '${esp.checksumPath}'; then
 
           echo "Proceeding to clone ESP because checksum is different from cache."
           clone_esp
