@@ -271,6 +271,7 @@ in
       gpm.enable = true;
       printing.enable = true;
       printing.drivers = [ pkgs.gutenprint ];
+      pcscd.enable = true;
       avahi.enable = true;
       kmscon.enable = true;
       kmscon.hwRender = true;
