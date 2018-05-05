@@ -132,7 +132,7 @@ in
     "nixpkgs=/nix/nixpkgs"
     "nixos-config=/etc/nixos/intel-nuc7i7bnh/configuration.nix"
   ];
-  nix.maxJobs = 4;
+  nix.maxJobs = "auto";
   nix.buildCores = 0;
   nix.useSandbox =  true;
   nix.readOnlyStore = true;
