@@ -313,6 +313,24 @@ in
         useDefaultShell = true;
         hashedPassword = builtins.readFile ./secrets/vivian_password_hash;
       };
+      "ray" = {
+        uid = 1003;
+        description = "Ray";
+        group = "operators";
+        extraGroups = [
+          "users"
+          "networkmanager"
+          "scanner"
+          "lp"
+          "docker"
+          "adbusers"
+          "plugdev"
+        ];
+        home = "/home/ray";
+        createHome = true;
+        useDefaultShell = true;
+        hashedPassword = builtins.readFile ./secrets/ray_password_hash;
+      };
     };
   };
 
