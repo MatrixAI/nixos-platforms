@@ -64,7 +64,7 @@ in
         boot.hardwareScan = true;
 
         # Sets the linux kernel version
-        boot.kernelPackages = pkgs.linuxPackages_4_15;
+        boot.kernelPackages = pkgs.linuxPackages_4_17;
 
         # Kernel modules available for loading for stage 1 boot
         boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "usbhid" "usb_storage" "sd_mod" ];
@@ -304,10 +304,5 @@ in
             NAME="Form Bay ML"
             ID="formbay-ml"
         '';
-
-        environment.variables = {
-            # disable gnome accessibility warnings
-            NO_AT_BRIDGE = "1";
-        };
 
     }
