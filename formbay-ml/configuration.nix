@@ -90,7 +90,7 @@ in
 
         boot.runSize = "50%"; # refers to /run (runtime files, could use some memory)
         boot.devShmSize = "50%"; # refers to /dev/shm (shared memory, useless if no applications use shared memory)
-        boot.devSize = "5%"; # refers to /dev (this shouldn't much at all)    
+        boot.devSize = "5%"; # refers to /dev (this shouldn't much at all)
 
         networking = {
             hostName = "formbay-ml";
